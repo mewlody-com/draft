@@ -12,8 +12,8 @@ if [[ $(whoami) != "root" ]]; then
   exit 2
 fi
 
-read -s -n1 -p "是否修改为清华源? [y/N]" B_UPDATE_APT_SOURCES && echo
-read -s -n1 -p "是否修改SSH设置? [y/N]" B_UPDATE_SSH_CONFIG && echo
+read -s -n1 -p "是否修改为清华源? [y/N]" B_UPDATE_APT_SOURCES && echo $B_UPDATE_APT_SOURCES
+read -s -n1 -p "是否修改SSH设置? [y/N]" B_UPDATE_SSH_CONFIG && echo $B_UPDATE_SSH_CONFIG
 
 case $B_UPDATE_SSH_CONFIG in
 [yY])
@@ -40,9 +40,9 @@ case $B_UPDATE_SSH_CONFIG in
 
   portRead
 
-  read -s -n1 -p "是否禁止密码登录? [y/N]" P_SSH_DENY_PASSWORD && echo
+  read -s -n1 -p "是否禁止密码登录? [y/N]" P_SSH_DENY_PASSWORD && echo $P_SSH_DENY_PASSWORD
   # 编辑ssh公钥
-  read -s -n1 -p "准备编辑ssh公钥(按任意键继续, Ctrl + C 退出)" && echo
+  read -s -n1 -p "准备编辑ssh公钥(按任意键继续, Ctrl + C 退出)"
   vi ~/.ssh/authorized_keys
   chmod 600 ~/.ssh/authorized_keys
 
@@ -57,7 +57,7 @@ case $B_UPDATE_SSH_CONFIG in
   ;;
 esac
 
-read -s -n1 -p "是否安装K8s组件? [y/N]" B_INSTALL_K8S && echo
+read -s -n1 -p "是否安装K8s组件? [y/N]" B_INSTALL_K8S && echo $B_INSTALL_K8S
 
 # 修改apt源
 case $B_UPDATE_APT_SOURCES in
