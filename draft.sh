@@ -61,7 +61,7 @@ esac
 # 修改apt源
 case $B_UPDATE_APT_SOURCES in
 [yY])
-  cp -b /etc/apt/sources.list /etc/apt/sources.list.bak
+  cp -b /etc/apt/sources.list /etc/apt/sources.list.bak 2>/dev/null
   echo "# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
@@ -77,13 +77,13 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted 
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
 " >/etc/apt/sources.list
 
-  cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.bak
+  cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.bak 2>/dev/null
   echo "deb https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
   gpg --keyserver keyserver.ubuntu.com --recv-keys 8B57C5C2836F4BEB
   gpg --export --armor 8B57C5C2836F4BEB | sudo apt-key add -
   ;;
 *)
-  cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.bak
+  cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.bak 2>/dev/null
   echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
   curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
   ;;
@@ -97,7 +97,7 @@ case $B_UPDATE_SSH_CONFIG in
 [yY])
   config_file="/etc/ssh/sshd_config"
 
-  cp -b $config_file $config_file.bak
+  cp -b $config_file $config_file.bak 2>/dev/null
 
   echo "" >>$config_file
 
