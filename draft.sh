@@ -14,7 +14,6 @@ fi
 
 read -s -n1 -p "是否修改为清华源? [y/N]" B_UPDATE_APT_SOURCES && echo
 read -s -n1 -p "是否修改SSH设置? [y/N]" B_UPDATE_SSH_CONFIG && echo
-read -s -n1 -p "是否安装K8s组件? [y/N]" B_INSTALL_K8S && echo
 
 case $B_UPDATE_SSH_CONFIG in
 [yY])
@@ -57,6 +56,8 @@ case $B_UPDATE_SSH_CONFIG in
   esac
   ;;
 esac
+
+read -s -n1 -p "是否安装K8s组件? [y/N]" B_INSTALL_K8S && echo
 
 # 修改apt源
 case $B_UPDATE_APT_SOURCES in
@@ -154,6 +155,15 @@ case $B_UPDATE_SSH_CONFIG in
   ;;
 esac
 
+# 防火墙
+iptables -F
+
+echo y | ufw reset
+
+ufw allow $P_SSH_PORT/tcp
+ufw default deny
+echo y | ufw enable
+
 # 安装Docker
 apt-get install -y docker.io
 echo "{
@@ -168,15 +178,3 @@ case $B_INSTALL_K8S in
   apt-get -y install kubelet kubectl kubeadm
   ;;
 esac
-
-# 更新
-apt-get update && apt-get -y upgrade
-
-# 防火墙
-iptables -F
-
-echo y | ufw reset
-
-ufw allow $P_SSH_PORT/tcp
-ufw default deny
-echo y | ufw enable
