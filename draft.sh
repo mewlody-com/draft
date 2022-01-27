@@ -178,4 +178,3 @@ ufw allow $P_SSH_PORT/tcp
 ufw default deny
 echo y | ufw enable
 
-reboot now
