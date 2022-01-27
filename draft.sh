@@ -169,8 +169,6 @@ case $B_INSTALL_K8S in
   ;;
 esac
 
-apt-get -y autoremove
-
 # 防火墙
 iptables -F
 
