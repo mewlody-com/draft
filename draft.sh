@@ -12,13 +12,12 @@ if [[ $(whoami) != "root" ]]; then
   exit 2
 fi
 
-read -s -n1 -p "是否修改为清华源? [Y/n]" B_UPDATE_APT_SOURCES && echo
-read -s -n1 -p "是否修改SSH设置? [Y/n]" B_UPDATE_SSH_CONFIG && echo
-read -s -n1 -p "是否安装K8s组件? [Y/n]" B_INSTALL_K8S && echo
+read -s -n1 -p "是否修改为清华源? [y/N]" B_UPDATE_APT_SOURCES && echo
+read -s -n1 -p "是否修改SSH设置? [y/N]" B_UPDATE_SSH_CONFIG && echo
+read -s -n1 -p "是否安装K8s组件? [y/N]" B_INSTALL_K8S && echo
 
 case $B_UPDATE_SSH_CONFIG in
 [yY])
-
   portRead() {
     read -p "请输入ssh端口 [default: 322]: " P_SSH_PORT
     portCheck
@@ -64,19 +63,19 @@ case $B_UPDATE_APT_SOURCES in
 [yY])
   cp -b /etc/apt/sources.list /etc/apt/sources.list.bak
   echo "# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-        deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
-        # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
-        deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
-        # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
-        deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
-        # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
-        deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
-        # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
 
-        # 预发布软件源，不建议启用
-        # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
-        # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
-        " >/etc/apt/sources.list
+# 预发布软件源，不建议启用
+# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+" >/etc/apt/sources.list
 
   cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.bak
   echo "deb https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
@@ -155,22 +154,13 @@ case $B_UPDATE_SSH_CONFIG in
   ;;
 esac
 
-# 防火墙
-iptables -F
-
-ufw -y reset
-
-ufw allow $P_SSH_PORT/tcp
-ufw default deny
-ufw enable
-
 # 安装Docker
 apt-get install -y docker.io
 echo "{
-        \"exec-opts\": [
-          \"native.cgroupdriver=systemd\"
-        ]
-      }
+  \"exec-opts\": [
+    \"native.cgroupdriver=systemd\"
+  ]
+}
 " >/etc/docker/daemon.json
 
 case $B_INSTALL_K8S in
@@ -180,4 +170,14 @@ case $B_INSTALL_K8S in
 esac
 
 apt-get -y autoremove
+
+# 防火墙
+iptables -F
+
+echo y | ufw reset
+
+ufw allow $P_SSH_PORT/tcp
+ufw default deny
+echo y | ufw enable
+
 reboot now
