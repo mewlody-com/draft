@@ -41,7 +41,7 @@ case $B_UPDATE_SSH_CONFIG in
 
   portRead
 
-  read -s -n1 -p "是否禁止密码登录? [Y/n]" P_SSH_DENY_PASSWORD && echo
+  read -s -n1 -p "是否禁止密码登录? [y/N]" P_SSH_DENY_PASSWORD && echo
   # 编辑ssh公钥
   read -s -n1 -p "准备编辑ssh公钥(按任意键继续, Ctrl + C 退出)" && echo
   vi ~/.ssh/authorized_keys
