@@ -57,8 +57,6 @@ case $B_UPDATE_SSH_CONFIG in
   ;;
 esac
 
-read -s -n1 -p "是否安装K8s组件? [y/N]" B_INSTALL_K8S && echo $B_INSTALL_K8S
-
 # 修改apt源
 case $B_UPDATE_APT_SOURCES in
 [yY])
@@ -78,17 +76,6 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted 
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
 " >/etc/apt/sources.list
 
-  # K8s源
-  cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.mewbak
-  echo "deb https://mirrors.tuna.tsinghua.edu.cn/kubernetes/apt kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
-  gpg --keyserver keyserver.ubuntu.com --recv-keys 8B57C5C2836F4BEB
-  gpg --export --armor 8B57C5C2836F4BEB | sudo apt-key add -
-  ;;
-*)
-  # K8s源
-  cp -b /etc/apt/sources.list.d/kubernetes.list /etc/apt/sources.list.d/kubernetes.list.mewbak
-  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
   ;;
 esac
 
@@ -174,10 +161,3 @@ echo "{
   ]
 }
 " >/etc/docker/daemon.json
-
-# 安装K8s
-case $B_INSTALL_K8S in
-[yY])
-  apt-get -y install kubelet kubectl kubeadm
-  ;;
-esac
