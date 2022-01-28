@@ -162,4 +162,9 @@ echo "{
 }
 " >/etc/docker/daemon.json
 
+# 设置中文
 locale-gen zh_CN.UTF-8
+if [[ $(grep -o "export LANG=" /etc/profile | wc -l) == 0 ]]; then
+  echo "" >>/etc/profile
+  echo "export LANG=zh_CN.UTF-8" >>/etc/profile
+fi
