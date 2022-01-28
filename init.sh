@@ -161,3 +161,5 @@ echo "{
   ]
 }
 " >/etc/docker/daemon.json
+
+locale-gen zh_CN.UTF-8
