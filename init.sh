@@ -80,7 +80,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted 
 esac
 
 # 更新
-apt-get update && apt-get -y upgrade
+apt-get update && apt-get -y dist-upgrade
 
 # 修改sshd_config
 case $B_UPDATE_SSH_CONFIG in
